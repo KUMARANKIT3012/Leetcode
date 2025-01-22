@@ -1,3 +1,31 @@
+                                                                  // with recursion:
+class Solution {
+public:
+    // helper function:
+    int binsearch(vector<int>& arr, int tar, int st, int end){
+        if(st<=end){
+            int mid=st+(end-st)/2;
+            if(arr[mid] == tar)return mid;
+            else if(arr[mid] <= tar){
+                return binsearch(arr, tar, mid+1, end); // 2nd half searching
+            }
+            else{
+                return binsearch(arr, tar, st, mid-1); // 1st half searching
+            }
+        }
+        return -1;
+    }
+    int search(vector<int>& arr, int tar) {
+        return binsearch(arr, tar, 0, arr.size()-1);
+    }
+};
+
+
+
+
+
+                                                               // with looping: 
+
 #include <vector>
 #include <iostream>
 class Solution {
