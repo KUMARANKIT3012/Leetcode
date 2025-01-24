@@ -5,7 +5,7 @@ public:
         vector<vector<int>> ans;
         sort(nums.begin(), nums.end()); // sort the array
         for(int i=0; i<n; i++){
-            if(i > 0 && nums[i] == nums[i-1]){ // first condition check
+            if(i > 0 && nums[i] == nums[i-1]){  // first condition check
                 continue;
             }
             int j=i+1, k=n-1;
