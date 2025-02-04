@@ -1,7 +1,7 @@
 #include<iostream>
 #include<algorithm>
 #include<vector>
-#include<climits>
+#include<climits> 
 using namespace std;
 
 bool ispossible(vector<int>&arr, int N, int C, int minalloweddist){//O(n)
