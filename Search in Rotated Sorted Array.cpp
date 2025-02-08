@@ -7,7 +7,7 @@ public:
             if(A[mid]==tar){
                 return mid;
             }
-            if(A[st]<=A[mid]){
+            if(A[st]<=A[mid]){ // check for which side is rotated 
                 if(A[st]<=tar && tar<=A[mid]){
                     end=mid-1;
                 }
