@@ -16,7 +16,7 @@ public:
             if(A[mid-1]!=A[mid] && A[mid]!=A[mid+1]){
                 return A[mid];
             }
-            else if(mid%2==0){ // even
+            else if(mid%2==0){ // even (remember this case as well as......
                 if(A[mid-1]==A[mid]){ // left
                     end=mid-1;
                 }
@@ -24,7 +24,7 @@ public:
                     st=mid+1;
                 }
             }
-            else{ // odd 
+            else{ // odd ....... this case)
                 if(A[mid-1]==A[mid]){ // left
                     st=mid+1;
                 }
