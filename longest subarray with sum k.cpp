@@ -22,3 +22,27 @@ int longestSubarrayWithSumK(vector<int> a, long long k) {
     }
     return maxlen;
     }
+
+
+
+                                            // for negative number:
+map<long long, int>presumMap;
+    long long sum = 0;
+    int maxlen = 0;
+    for(int i=0; i<a.size(); i++){
+            sum+=a[i];
+            if(sum == k){
+                maxlen = max(maxlen, i+1);
+            }
+            // bring the reverse maths:
+            long long rem = sum - k;
+            if(presumMap.find(rem) != presumMap.end()){
+                int len = i- presumMap[rem];
+                maxlen = max(maxlen, len);
+            }
+            if(presumMap.find(sum) == presumMap.end())
+            {
+                presumMap[sum]=i;
+            }
+        }
+    return maxlen;
