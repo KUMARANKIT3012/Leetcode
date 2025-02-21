@@ -1,5 +1,6 @@
 class Solution {
 public:
+
     bool isValid(vector<vector<int>>&grid, int r, int c, int n, int expVal){
         // base case for false condition:
         if(r<0 || c<0 || r>=n || c>=n || grid[r][c] != expVal){
