@@ -1,34 +1,30 @@
 class Solution {
 public:
-    set<vector<int>> s;
-    void getallcombinations(vector<int>& arr, int idx, int tar, vector<vector<int>> &ans,  vector<int> &combin){
-        //base case:
-        if(idx == arr.size() || tar<0){
+    void findcombination(vector<int>& arr, int idx, int target, vector<vector<int>> &ans, vector<int> &ds) {
+        // Base case: 
+        if (idx == arr.size()) {
+            if (target == 0) {
+                ans.push_back(ds);
+            }
             return;
         }
-        if(tar == 0){
-            if(s.find(combin) == s.end()){
-            ans.push_back(combin);
-            s.insert(combin);
+
+        // Pick up the element if it does not exceed the target
+        if (arr[idx] <= target) {
+            ds.push_back(arr[idx]);
+            findcombination(arr, idx, target - arr[idx], ans, ds); // Recursive call with the same index
+            ds.pop_back(); // Backtracking step
         }
-        return;
-        }
 
+        // Move to the next index
+        findcombination(arr, idx + 1, target, ans, ds);
+    }    
 
-        combin.push_back(arr[idx]);
-        //single:
-        getallcombinations(arr, idx+1, tar-arr[idx],ans,combin);
-        //multiple:
-        getallcombinations(arr, idx, tar-arr[idx],ans,combin);
-        combin.pop_back();
-        //exclusion:
-        getallcombinations(arr,idx+1,tar,ans,combin);
-
-    }
-    vector<vector<int>> combinationSum(vector<int>& arr, int target) {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int>> ans;
-        vector<int> combin;
-        getallcombinations(arr, 0 , target, ans, combin);
+        vector<int> ds;
+        findcombination(candidates, 0, target, ans, ds);
         return ans;
     }
 };
