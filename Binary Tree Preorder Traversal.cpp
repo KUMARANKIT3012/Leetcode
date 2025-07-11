@@ -1,16 +1,18 @@
 class Solution {
 public:
-    void dfs(TreeNode* root, vector<int>& result) {
-        if (root == NULL) return;
+    void preorder(TreeNode* node, vector<int>& result)
+    {
+        if (node == NULL)
+            return;
 
-        result.push_back(root->val);     // Visit root
-        dfs(root->left, result);         // Traverse left subtree
-        dfs(root->right, result);        // Traverse right subtree
+        result.push_back(node->val);        // Root
+        preorder(node->left, result);       // Left
+        preorder(node->right, result);      // Right
     }
 
     vector<int> preorderTraversal(TreeNode* root) {
         vector<int> result;
-        dfs(root, result);
+        preorder(root, result);
         return result;
     }
 };
