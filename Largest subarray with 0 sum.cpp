@@ -1,26 +1,25 @@
 class Solution {
-  public:
-    int maxLen(vector<int>& arr) {
-        // code here
+public:
+    int maxLength(vector<int>& arr) {
         int n = arr.size();
-        unordered_map<int, int>prefixmap;
-        int prefixsum = 0;
-        int maxlen  = 0;
-        for(int i =0; i<n; i++){
-            prefixsum+=arr[i];
-            
-            if(prefixsum == 0){
-                maxlen = i+1;
+        unordered_map<long long, int> mp; // prefix sum -> first index
+        long long sum = 0;
+        int maxlen = 0;
+
+        for (int i = 0; i < n; i++) {
+            sum += arr[i];
+
+            if (sum == 0) {
+                maxlen = i + 1; // subarray from 0 to i
             }
-            
-            if(prefixmap.find(prefixsum) != prefixmap.end()){
-                maxlen = max(maxlen, i - prefixmap[prefixsum]);
+            else if (mp.find(sum) != mp.end()) {
+                maxlen = max(maxlen, i - mp[sum]);
             }
-            else{
-                prefixmap[prefixsum] = i;
+            else {
+                mp[sum] = i; // store first occurrence
             }
         }
+
         return maxlen;
-        
     }
 };
