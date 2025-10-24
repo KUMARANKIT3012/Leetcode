@@ -43,3 +43,44 @@ int main(){
     cout<<getdistance(arr, N, C)<<endl;
     return 0;
 }
+
+
+
+
+// another way : 
+class Solution {
+  public:
+    bool canWePlace(vector<int> &stalls, int k, int dist) {
+        int count = 1;  // place first cow at first stall
+        int last = stalls[0];
+        
+        for (int i = 1; i < stalls.size(); i++) {
+            if (stalls[i] - last >= dist) {
+                count++;
+                last = stalls[i];
+            }
+            if (count >= k) return true; // all cows placed
+        }
+        return false;
+    }
+    
+    int aggressiveCows(vector<int> &stalls, int k) {
+        sort(stalls.begin(), stalls.end());
+        
+        int low = 1; // minimum possible distance
+        int high = stalls.back() - stalls.front(); // maximum possible distance
+        int ans = -1;
+        
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            
+            if (canWePlace(stalls, k, mid)) {
+                ans = mid;        // possible answer
+                low = mid + 1;    // try for bigger distance
+            } else {
+                high = mid - 1;   // reduce distance
+            }
+        }
+        return ans;
+    }
+};
