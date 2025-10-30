@@ -1,4 +1,4 @@
-
+// Simple logic
 class Solution {
 public:
     void deleteNode(ListNode* node) {
