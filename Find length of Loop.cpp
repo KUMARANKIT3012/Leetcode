@@ -10,6 +10,8 @@ class Solution {
         }
         return count;
     }
+
+// MAIN FUNCTION : 
     int countNodesinLoop(Node *head) {
         // Code here
         Node * slow = head;
