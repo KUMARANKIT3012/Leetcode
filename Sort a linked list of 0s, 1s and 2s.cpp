@@ -2,7 +2,8 @@ class Solution {
   public:
     // Function to sort a linked list of 0s, 1s and 2s.
     Node* segregate(Node* head) {
-        
+
+      // base case to check 
         if(!head || !head->next) return head;
         Node* zerohead = new Node(-1);
         Node* onehead = new Node(-1);
