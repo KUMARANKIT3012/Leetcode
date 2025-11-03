@@ -1,6 +1,6 @@
 class Solution {
   public:
-  
+  // helper function 
     int addhelper(Node* temp){
         if(temp == NULL){
             return 1;
@@ -13,6 +13,9 @@ class Solution {
         temp->data = 0;
         return 1;
     }
+
+
+// main function 
     Node* addOne(Node* head) {
         // Your Code here
         // return head of list after adding one
