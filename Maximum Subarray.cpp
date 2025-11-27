@@ -1,3 +1,5 @@
+// isme I'll use if currsum < 0 not arr[i] == 0
+
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
