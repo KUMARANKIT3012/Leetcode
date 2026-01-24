@@ -1,29 +1,73 @@
-void MyQueue:: push(int x)
-{
-    QueueNode* newNode = new QueueNode(x);
+class Node {
     
-    if (rear == NULL) { // If the queue is empty
-        front = rear = newNode;
-        return;
-    }
-    rear->next = newNode; // Link the last node to the new node
-    rear = newNode;       // Update rear
-}
-
-int MyQueue :: pop()
-{
-    if (front == NULL) { // If queue is empty
-    return -1; 
-    }
     
-    int poppedValue = front->data;
-    QueueNode* temp = front;
-    front = front->next; // Move front to the next node
+  public:
+    int data;
+    Node* next;
 
-    if (front == NULL) { 
-        rear = NULL;
+    Node(int new_data) {
+        data = new_data;
+        next = nullptr;
+    }
+};
+
+class myQueue {
+    
+    private:
+    Node* frontnode;
+    Node* rearnode;
+    int cnt;
+
+  public:
+    myQueue() {
+        // Initialize your data members
+        frontnode = nullptr;
+        rearnode = nullptr;
+        cnt = 0;
+        
     }
 
-    delete temp; // Free memory
-    return poppedValue;
-}
+    bool isEmpty() {
+        // check if the queue is empty
+        return frontnode == nullptr;
+    }
+
+    void enqueue(int x) {
+        // Adds an element x at the rear of the queue
+        Node* newnode = new Node(x);
+        if(isEmpty()){
+            frontnode = rearnode = newnode;
+        }
+        else{
+            rearnode->next = newnode;
+            rearnode = newnode;
+        }
+        cnt++;
+    }
+
+    void dequeue() {
+        // Removes the front element of the queue
+        if(isEmpty()) return;
+        
+        Node* temp = frontnode;
+        frontnode = frontnode->next;
+        
+        if(frontnode == nullptr){
+            rearnode = nullptr;
+        }
+        delete temp;
+        cnt--;
+    }
+
+    int getFront() {
+        // Returns the front element of the queue
+        // If queue is empty, return -1
+        if(isEmpty()) return -1;
+        return frontnode->data;
+    }
+
+    int size() {
+        // Returns the current size of the queue.
+        return cnt;
+    }
+};
