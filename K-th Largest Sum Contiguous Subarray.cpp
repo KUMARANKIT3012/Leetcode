@@ -1,25 +1,27 @@
-#include <vector>
-#include <queue>
-using namespace std;
+// User function Template for C++
 
 class Solution {
   public:
-    int kthLargest(vector<int>& arr, int k) {
-        priority_queue<int, vector<int>, greater<int>> mini;
+    int kthLargest(vector<int> &arr, int k) {
+        // code here
         int n = arr.size();
-        for (int i = 0; i < n; i++) {
+        
+        priority_queue<int, vector<int>, greater<int>> pq;
+        
+        for(int i = 0; i<n; i++){
             int sum = 0;
-            for (int j = i; j < n; j++) {
+            
+            for(int j = i; j<n; j++){
                 sum += arr[j];
-
-                if (mini.size() < k) {
-                    mini.push(sum);
-                } else if (sum > mini.top()) {
-                    mini.pop();
-                    mini.push(sum);
+                
+                pq.push(sum);
+                
+                while(pq.size() > k){
+                    pq.pop();
                 }
             }
         }
-        return mini.top();
+        return pq.top();
+        
     }
 };
