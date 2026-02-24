@@ -1,44 +1,37 @@
 class Solution {
-public:
-    struct Item {
-        int value, weight;
-        Item(int v, int w) : value(v), weight(w) {}
-    };
-
-    // Custom comparator: sort by value/weight ratio in descending order
-    static bool cmp(Item a, Item b) {
-        double r1 = (double)a.value / a.weight;
-        double r2 = (double)b.value / b.weight;
-        return r1 > r2;
-    }
-
+  public:
     double fractionalKnapsack(vector<int>& val, vector<int>& wt, int capacity) {
+        // code here
         int n = val.size();
-        vector<Item> items;
-
-        // Create list of items
-        for (int i = 0; i < n; ++i) {
-            items.push_back(Item(val[i], wt[i]));
+        
+        vector<pair<double, pair<int,int>>> items;
+        
+        for(int i = 0; i<n; i++){
+            double ratio = (double)val[i] / wt[i];
+            items.push_back({ratio, {wt[i], val[i]}});
         }
-
-        // Sort using custom comparator
-        sort(items.begin(), items.end(), cmp);
-
+        
+        sort(items.begin(), items.end(),
+            [](auto &a, auto &b) {
+                return a.first > b.first;
+            });
+            
         double totalValue = 0.0;
-
-        for (int i = 0; i < n && capacity > 0; ++i) {
-            if (items[i].weight <= capacity) {
-                // Take the full item
-                totalValue += items[i].value;
-                capacity -= items[i].weight;
-            } else {
-                // Take fractional part
-                double fraction = (double)capacity / items[i].weight;
-                totalValue += items[i].value * fraction;
-                break; // Knapsack is full
+        
+        for(auto &item : items){
+            int weight = item.second.first;
+            int value = item.second.second;
+            
+            if(capacity >= weight){
+                totalValue += value;
+                capacity -= weight;
+            }
+            
+            else{
+                totalValue += item.first * capacity;
+                break;
             }
         }
-
         return totalValue;
     }
 };
