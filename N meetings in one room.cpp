@@ -1,39 +1,29 @@
 class Solution {
-public:
-    // Custom structure to store meeting info
-    struct Meeting {
-        int start;
-        int end;
-    };
-
-    // Comparator function to sort meetings by end time
-    static bool compare(Meeting m1, Meeting m2) {
-        return m1.end < m2.end;
-    }
-
+  public:
+    // Function to find the maximum number of meetings that can
+    // be performed in a meeting room.
     int maxMeetings(vector<int>& start, vector<int>& end) {
+        // Your code here
+        
         int n = start.size();
-        vector<Meeting> meetings(n);
-
-        // Fill the meeting vector
-        for (int i = 0; i < n; i++) {
-            meetings[i].start = start[i];
-            meetings[i].end = end[i];
+        
+        vector<pair<int, int>> meetings;
+        for(int i = 0; i<n; i++){
+            meetings.push_back({end[i], start[i]});
         }
-
-        // Sort meetings by end time using custom comparator
-        sort(meetings.begin(), meetings.end(), compare);
-
-        int count = 1; // At least one meeting can be selected
-        int lastEnd = meetings[0].end;
-
-        for (int i = 1; i < n; i++) {
-            if (meetings[i].start > lastEnd) {
+        
+        sort(meetings.begin(), meetings.end());
+        
+        int count = 1;
+        int lastEnd = meetings[0].first;
+        
+        for(int i = 1; i<n; i++){
+            if(meetings[i].second > lastEnd){
                 count++;
-                lastEnd = meetings[i].end;
+                lastEnd = meetings[i].first;
             }
         }
-
         return count;
+        
     }
 };
