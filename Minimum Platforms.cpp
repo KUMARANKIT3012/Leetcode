@@ -1,25 +1,28 @@
 class Solution {
   public:
-    int findPlatform(vector<int>& arr, vector<int>& dep) {
+    int minPlatform(vector<int>& arr, vector<int>& dep) {
+        // code here
         int n = arr.size();
-
         sort(arr.begin(), arr.end());
         sort(dep.begin(), dep.end());
-
-        int i = 0, j = 0;
-        int count = 0, maxCount = 0;
-
-        while (i < n && j < n) {
-            if (arr[i] <= dep[j]) {
-                count++;
+        
+        int i = 1;
+        int j = 0;
+        int platform_needed = 1;
+        int max_platform = 1;
+        
+        while(i<n && j<n){
+            if(arr[i] <= dep[j]){
+                platform_needed++;
                 i++;
-            } else {
-                count--;
+            }
+            else{
+                platform_needed--;
                 j++;
             }
-            maxCount = max(maxCount, count);
+            max_platform = max(max_platform, platform_needed);
         }
-
-        return maxCount;
+        return max_platform;
+        
     }
 };
