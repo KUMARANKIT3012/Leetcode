@@ -1,43 +1,36 @@
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
 class Solution {
 public:
-    ListNode* reversell(ListNode* head){
-        if(head == NULL || head->next == NULL) return head;
-        ListNode* newhead = reversell(head->next);
-        ListNode* front = head->next;
-        front->next = head;
-        head->next = NULL;
-        return newhead;
-    }
     bool isPalindrome(ListNode* head) {
-        if(head == NULL || head->next == NULL) return true;
-        ListNode* slow= head;
         ListNode* fast = head;
-        while(fast->next != NULL && fast->next->next != NULL){
-            slow = slow->next;
+        ListNode* slow = head;
+
+        // find middle
+        while (fast && fast->next) {
             fast = fast->next->next;
+            slow = slow->next;
         }
-        ListNode* newhead = reversell(slow->next);
-        ListNode* first = head;
-        ListNode* second = newhead;
-        while(second != NULL){
-            if(first->val != second->val){
-                reversell(newhead);
+
+        // reverse second half
+        ListNode* prev = NULL;
+        while (slow) {
+            ListNode* temp = slow->next;
+            slow->next = prev;
+            prev = slow;
+            slow = temp;
+        }
+
+        // check palindrome
+        ListNode* left = head;
+        ListNode* right = prev;
+
+        while (right) {
+            if (left->val != right->val) {
                 return false;
             }
-            first = first->next;
-            second = second->next;
+            left = left->next;
+            right = right->next;
         }
-        reversell(newhead);
+
         return true;
     }
 };
