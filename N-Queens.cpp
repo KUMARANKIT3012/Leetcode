@@ -1,52 +1,42 @@
 class Solution {
 public:
-    bool isSafe(vector<string> &board, int row, int col, int n){ // TC: O(n)
-        // horizontal:
-        for(int j=0; j<n; j++){
-            if(board[row][j] == 'Q'){
-                return false;
-            }
-        }
-        // vertically:
-        for(int i=0; i<n; i++){
-            if(board[i][col] == 'Q'){
-                return false;
-            }
-        }
-        // --> diagonally:
-        //(1) left diagonal:
-        for(int i=row,j=col; j>=0 && i>=0; i--,j--){
-            if(board[i][j] == 'Q'){
-                return false;
-            }
-        }
-        //(2) right diagonal:
-        for(int i=row,j=col; j<n && i>=0; i--,j++){
-            if(board[i][j] == 'Q'){
-                return false;
-            }
-        }   
-        return true; 
-    }
-    void nqueens(vector<string> &board, int row, int n, vector<vector<string>> &ans){
-        if(row == n){
-            ans.push_back({board});
+    vector<vector<string>> ans;
+    vector<string> board;
+
+    unordered_set<int> col;      // column
+    unordered_set<int> posDiag;  // r + c
+    unordered_set<int> negDiag;  // r - c
+
+    void backtrack(int r, int n) {
+        if (r == n) {
+            ans.push_back(board);
             return;
         }
 
+        for (int c = 0; c < n; c++) {
+            // check if safe
+            if (col.count(c) || posDiag.count(r + c) || negDiag.count(r - c))
+                continue;
 
-        for(int j=0; j<n; j++){
-            if(isSafe(board, row, j , n)){
-                board[row][j] = 'Q';
-                nqueens(board, row+1, n, ans);
-                board[row][j]='.';
-            }
+            // place queen
+            col.insert(c);
+            posDiag.insert(r + c);
+            negDiag.insert(r - c);
+            board[r][c] = 'Q';
+
+            backtrack(r + 1, n);
+
+            // remove queen (backtrack)
+            col.erase(c);
+            posDiag.erase(r + c);
+            negDiag.erase(r - c);
+            board[r][c] = '.';
         }
     }
+
     vector<vector<string>> solveNQueens(int n) {
-        vector<string> board(n, string(n, '.'));
-        vector<vector<string>> ans;
-        nqueens(board, 0, n, ans);
+        board = vector<string>(n, string(n, '.'));
+        backtrack(0, n);
         return ans;
     }
 };
