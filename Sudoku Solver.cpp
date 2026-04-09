@@ -15,10 +15,10 @@ public:
         }
 
         // grid:
-        int srow=(row/3)*3;
-        int scol=(col/3)*3;
-        for(int i= srow; i<= srow+2; i++){
-            for(int j= scol; j<=scol+2; j++){
+        int srow=(row/3)*3; // har grid ka srow hai 
+        int scol=(col/3)*3; // har grid ka scol hai 
+        for(int i= srow; i<= srow+2; i++){ // 2 place hi aage jaegi
+            for(int j= scol; j<=scol+2; j++){ // similar for col 
                 if(board[i][j] == dig){
                     return false;
                 }
@@ -30,20 +30,25 @@ public:
         // Base Case:
         if(row == 9){
             return true;
-        }
+        } 
+        // initializing nextrow and nextcol 
         int nextrow = row, nextcol = col+1;
+        //  if col reaches end then increase row by 1 and make col from 1 again 
         if(nextcol == 9){
             nextrow = row+1;
             nextcol = 0;
         }
+        // kya hamara cell fill to nahi hai 
         if(board[row][col] != '.'){
+            // fill hai toh next cell ki call lagani hai 
            return helper(board, nextrow, nextcol);
         }
 
-        // placing digit:
+        // placing digit if cell is not filled:
         for(char dig = '1'; dig<='9' ; dig++){
+            // place karne se pehle we are checking if it is safe to place 
             if(isSafe(board, row, col, dig)){
-                board[row][col] = dig;
+                board[row][col] = dig; // cell pe digit place 
                 if(helper(board, nextrow, nextcol)){
                     return true;
                 }
