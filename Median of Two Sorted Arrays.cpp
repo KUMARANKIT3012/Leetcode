@@ -36,3 +36,39 @@ public:
         return 0.0; 
     }
 };
+
+
+
+
+
+
+
+
+// OR
+
+
+
+
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& a, vector<int>& b) {
+        vector<int> merged;
+
+        // Step 1: Add elements of both arrays
+        for (int x : a) merged.push_back(x);
+        for (int x : b) merged.push_back(x);
+
+        // Step 2: Sort the merged array
+        sort(merged.begin(), merged.end());
+
+        int n = merged.size();
+
+        // Step 3: Find median
+        if (n % 2 == 1) {
+            return merged[n / 2];
+        } else {
+            return (merged[n / 2] + merged[n / 2 - 1]) / 2.0;
+        }
+    }
+};
