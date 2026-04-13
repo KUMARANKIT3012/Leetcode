@@ -4,23 +4,28 @@ std::vector<int> stack;
 public:
     MyStack() {
     }
-     void push(int x) {
-        stack.push_back(x); // Push at the end
+    void push(int x) {
+        stack.push_back(x);
     }
     
     int pop() {
-        if (stack.empty()) return -1; // edge case hai yeh
-        int topElement = stack.back();
+        if(stack.empty()){
+            return -1;
+        }
+        int topelement = stack.back();
         stack.pop_back();
-        return topElement;
+        return topelement;
+        
     }
     
     int top() {
-        if (stack.empty()) return -1; // empty stack condn
+        if(stack.empty()) return -1;
         return stack.back();
+        
     }
     
     bool empty() {
-        return stack.empty(); 
+        return stack.empty();
+        
     }
 };
