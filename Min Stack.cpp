@@ -1,43 +1,43 @@
 class MinStack {
-private:
-    std::stack<long long> st;  // Use long long to prevent overflow
-    long long minElement;  
-
 public:
+        stack<int> st;
+        stack<int> minst;
     MinStack() {
-        minElement = INT_MAX;
     }
     
     void push(int val) {
-        if (st.empty()) {
-            minElement = val;
-            st.push(val);
-        } else {
-            if (val >= minElement) {
-                st.push(val);
-            } else {
-                st.push(2LL * val - minElement);  // Use long long to avoid overflow
-                minElement = val;
-            }
+        st.push(val);
+        if(!minst.empty()){
+            val = min(val, minst.top());
         }
+        else{
+            val = min(val, val);
+        }
+        minst.push(val);
     }
-
+    
     void pop() {
-        if (st.empty()) return;
-        long long x = st.top();
-        st.pop();
-        if (x < minElement) {
-            minElement = 2 * minElement - x;  // No risk of overflow here
+        if(!st.empty() && !minst.empty()){
+            st.pop();
+            minst.pop();
         }
     }
-
+    
     int top() {
-        if (st.empty()) return -1;
-        long long x = st.top();
-        return (x < minElement) ? minElement : x;
+        if(!st.empty()){
+            return st.top();
+        }
+        else{
+            return -1;
+        }
     }
     
     int getMin() {
-        return (st.empty()) ? -1 : minElement;
+        if(!minst.empty()){
+            return minst.top();
+        }
+        else{
+            return -1;
+        }
     }
 };
