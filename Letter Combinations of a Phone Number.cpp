@@ -1,32 +1,33 @@
 class Solution {
 public:
-    vector<string> letterCombinations(string digits) {
-        if (digits.empty()) return {};
+    vector<string> res;
+    unordered_map<char, string> digitToChar = {
+        {'2', "abc"},
+        {'3', "def"},
+        {'4', "ghi"},
+        {'5', "jkl"},
+        {'6', "mno"},
+        {'7', "pqrs"},
+        {'8', "tuv"},
+        {'9', "wxyz"}
+    };
 
-        vector<string> mapping = {
-            "",    "",    "abc", "def", "ghi",
-            "jkl", "mno", "pqrs", "tuv", "wxyz"
-        };
-
-        vector<string> result;
-        string current;
-        backtrack(0, digits, mapping, current, result);
-        return result;
-    }
-
-private:
-    void backtrack(int index, string& digits, vector<string>& mapping,
-                   string& current, vector<string>& result) {
-        if (index == digits.size()) {
-            result.push_back(current);
+    void backtrack(int i, string curStr, string& digits) {
+        if (curStr.length() == digits.length()) {
+            res.push_back(curStr);
             return;
         }
 
-        string letters = mapping[digits[index] - '0'];
-        for (char c : letters) {
-            current.push_back(c);
-            backtrack(index + 1, digits, mapping, current, result);
-            current.pop_back(); // backtrack
+        for (char c : digitToChar[digits[i]]) {
+            backtrack(i + 1, curStr + c, digits);
         }
+    }
+
+    vector<string> letterCombinations(string digits) {
+        if (!digits.empty()) {
+            backtrack(0, "", digits);
+        }
+
+        return res;
     }
 };
