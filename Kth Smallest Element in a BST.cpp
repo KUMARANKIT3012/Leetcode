@@ -22,3 +22,38 @@ private:
         inorder(node->right, k, count, result);
     }
 };
+
+
+
+
+// iteratively : 
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        int n = 0;
+
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+
+        while (cur || !st.empty()) {
+
+            while (cur) {
+                st.push(cur);
+                cur = cur->left;
+            }
+
+            cur = st.top();
+            st.pop();
+
+            n++;
+
+            if (n == k) {
+                return cur->val;
+            }
+
+            cur = cur->right;
+        }
+
+        return -1;
+    }
+};
