@@ -20,3 +20,46 @@ public:
         return view;
     }
 };
+
+
+
+
+// BFS : 
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        if (!root) {
+            return res;
+        }
+        queue<TreeNode*> q;
+        q.push(root);
+        while (!q.empty()) {
+            int qLen = q.size();
+            TreeNode* rightSide = nullptr;
+
+            for (int i = 0; i < qLen; i++) {
+                TreeNode* node = q.front();
+                q.pop();
+
+                if (node) {
+                    rightSide = node;
+
+                    if (node->left) {
+                        q.push(node->left);
+                    }
+
+                    if (node->right) {
+                        q.push(node->right);
+                    }
+                }
+            }
+
+            if (rightSide) {
+                res.push_back(rightSide->val);
+            }
+        }
+
+        return res;
+    }
+};
