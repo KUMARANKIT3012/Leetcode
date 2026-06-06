@@ -1,33 +1,20 @@
 class Solution {
 public:
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        map<int, int> inMap;
-
-        for(int i = 0; i < inorder.size(); i++) {
-            inMap[inorder[i]] = i;
+        if(preorder.empty() || inorder.empty()){
+            return NULL;
         }
+        TreeNode* root = new TreeNode(preorder[0]);
+        int mid = find(inorder.begin(), inorder.end(), preorder[0]) - inorder.begin();
+        
+        vector<int> leftPre(preorder.begin() + 1, preorder.begin() + mid + 1);
+        vector<int> leftIn(inorder.begin(), inorder.begin() + mid);
+        
+        vector<int> rightPre(preorder.begin() + mid + 1, preorder.end());
+        vector<int> rightIn(inorder.begin() + mid + 1, inorder.end());
 
-        TreeNode* root = buildTree(preorder, 0, preorder.size() - 1,
-                                   inorder, 0, inorder.size() - 1, inMap);
-
-        return root;
-    }
-
-    TreeNode* buildTree(vector<int>& preorder, int preStart, int preEnd,
-                        vector<int>& inorder, int inStart, int inEnd,
-                        map<int, int>& inMap) {
-        if(preStart > preEnd || inStart > inEnd) return NULL;
-
-        TreeNode* root = new TreeNode(preorder[preStart]);
-
-        int inRoot = inMap[root->val];
-        int numsLeft = inRoot - inStart;
-
-        root->left = buildTree(preorder, preStart + 1, preStart + numsLeft,
-                               inorder, inStart, inRoot - 1, inMap);
-
-        root->right = buildTree(preorder, preStart + numsLeft + 1, preEnd,
-                                inorder, inRoot + 1, inEnd, inMap);
+        root->left = buildTree(leftPre, leftIn);
+        root->right = buildTree(rightPre, rightIn);
 
         return root;
     }
