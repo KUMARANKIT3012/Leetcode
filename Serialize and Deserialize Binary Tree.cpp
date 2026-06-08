@@ -71,3 +71,76 @@ public:
 // Your Codec object will be instantiated and called as such:
 // Codec ser, deser;
 // TreeNode* ans = deser.deserialize(ser.serialize(root));
+
+
+
+
+
+
+
+
+
+
+class Codec {
+public:
+    string serialize(TreeNode* root) {
+        vector<string> res;
+
+        function<void(TreeNode*)> dfs = [&](TreeNode* node) {
+            if(!node) {
+                res.push_back("N");
+                return;
+            }
+
+            res.push_back(to_string(node->val));
+            dfs(node->left);
+            dfs(node->right);
+        };
+
+        dfs(root);
+
+        string ans = "";
+        for(int i = 0; i < res.size(); i++) {
+            ans += res[i];
+            if(i != res.size() - 1)
+                ans += ",";
+        }
+
+        return ans;
+    }
+
+    TreeNode* deserialize(string data) {
+        vector<string> vals;
+        string temp;
+
+        for(char c : data) {
+            if(c == ',') {
+                vals.push_back(temp);
+                temp = "";
+            } else {
+                temp += c;
+            }
+        }
+
+        vals.push_back(temp);
+
+        int i = 0;
+
+        function<TreeNode*()> dfs = [&]() {
+            if(vals[i] == "N") {
+                i++;
+                return (TreeNode*)NULL;
+            }
+
+            TreeNode* node = new TreeNode(stoi(vals[i]));
+            i++;
+
+            node->left = dfs();
+            node->right = dfs();
+
+            return node;
+        };
+
+        return dfs();
+    }
+};
