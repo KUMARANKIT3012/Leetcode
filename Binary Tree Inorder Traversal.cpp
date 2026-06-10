@@ -1,79 +1,44 @@
+// recursive approach : 
 class Solution {
 public:
-    void inorder(TreeNode* node, vector<int>& result)
-    {
-        if (node == NULL)
+    void inorder(TreeNode* root, vector<int>& res){
+        if(!root){
             return;
-
-        inorder(node->left, result);         // Left
-        result.push_back(node->val);         // Root
-        inorder(node->right, result);        // Right
-    }
-
-    vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> result;
-        inorder(root, result);
-        return result;
-    }
-};
-
-
-
-// iterative approach using stack : 
-class Solution {
-public:
-    vector<int> inorderTraversal(TreeNode* root) {
-        stack<TreeNode*> st;
-        TreeNode* node = root;
-        vector<int> inorder;
-
-        while (true) {
-            if (node != NULL) {
-                st.push(node);
-                node = node->left;
-            } else {
-                if (st.empty() == true) break;
-                node = st.top();
-                st.pop();
-                inorder.push_back(node->val);
-                node = node->right;
-            }
         }
-
-        return inorder;
+        inorder(root->left, res);
+        res.push_back(root->val);
+        inorder(root->right, res);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        inorder(root, res);
+        return res;
     }
 };
 
-// Morris Traversal
 
+// iterative : 
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
-        vector<int> inorder;
+        vector<int> res;
+        stack<TreeNode*> st;
         TreeNode* cur = root;
 
-        while (cur != NULL) {
-            if (cur->left == NULL) {
-                inorder.push_back(cur->val);
-                cur = cur->right;
-            } else {
-                TreeNode* prev = cur->left;
-                while (prev->right != NULL && prev->right != cur) {
-                    prev = prev->right;
-                }
-
-                if (prev->right == NULL) {
-                    prev->right = cur;  // Threading
-                    cur = cur->left;
-                } else {
-                    prev->right = NULL;  // Remove thread
-                    inorder.push_back(cur->val);
-                    cur = cur->right;
-                }
+        while (cur || !st.empty()) {
+            while (cur) {
+                st.push(cur);
+                cur = cur->left;
             }
+
+            cur = st.top();
+            st.pop();
+
+            res.push_back(cur->val);
+
+            cur = cur->right;
         }
 
-        return inorder;
+        return res;
     }
 };
-
