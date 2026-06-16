@@ -1,51 +1,60 @@
 class Solution {
-private:
-    void bfs(int row, int col, vector<vector<int>> &vis, vector<vector<char>> &grid) {
-        vis[row][col] = 1;
-        queue<pair<int,int>> q;
-        q.push({row, col});
-        
-        int n = grid.size();
-        int m = grid[0].size();
-        
-        // Directions: 8 surrounding cells (including diagonals)
-        int delRow[] = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int delCol[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+public:
+    void bfs(int r, int c,
+             vector<vector<char>>& grid,
+             set<pair<int, int>>& visit,
+             int rows, int cols) {
+                
+        queue<pair<int, int>> q;
+
+        visit.insert({r, c});
+        q.push({r, c});
+
+        vector<pair<int, int>> directions = {
+            {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+        };
 
         while (!q.empty()) {
-            int r = q.front().first;
-            int c = q.front().second;
+            auto [row, col] = q.front();
             q.pop();
 
-            for (int i = 0; i < 8; i++) {
-                int nrow = r + delRow[i];
-                int ncol = c + delCol[i];
+            for (auto [dr, dc] : directions) {
+                int nr = row + dr;
+                int nc = col + dc;
 
-                if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                    !vis[nrow][ncol] && grid[nrow][ncol] == '1') {
-                    vis[nrow][ncol] = 1;
-                    q.push({nrow, ncol});
+                if (nr >= 0 && nr < rows &&
+                    nc >= 0 && nc < cols &&
+                    grid[nr][nc] == '1' &&
+                    !visit.count({nr, nc})) {
+
+                    q.push({nr, nc});
+                    visit.insert({nr, nc});
                 }
             }
         }
     }
 
-public:
     int numIslands(vector<vector<char>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-        int cnt = 0;
-        
-        for (int row = 0; row < n; row++) {
-            for (int col = 0; col < m; col++) {
-                if (!vis[row][col] && grid[row][col] == '1') {
-                    cnt++;
-                    bfs(row, col, vis, grid);
+        if (grid.empty())
+            return 0;
+
+        int rows = grid.size();
+        int cols = grid[0].size();
+
+        set<pair<int, int>> visit;
+        int islands = 0;
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (grid[r][c] == '1' &&
+                    !visit.count({r, c})) {
+
+                    bfs(r, c, grid, visit, rows, cols);
+                    islands++;
                 }
             }
         }
-        
-        return cnt;
+
+        return islands;
     }
 };
