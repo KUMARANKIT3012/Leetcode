@@ -1,47 +1,34 @@
 class Solution {
-private:
-    bool dfsCheck(int node, vector<int> adj[], vector<int>& vis, vector<int>& pathVis, stack<int>& st) {
-        vis[node] = 1;
-        pathVis[node] = 1;
-
-        for (auto it : adj[node]) {
-            if (!vis[it]) {
-                if (dfsCheck(it, adj, vis, pathVis, st)) return true;
-            } else if (pathVis[it]) {
-                return true;  // cycle found
-            }
+public:
+    unordered_set<int> visit, cycle;
+    vector<int> output;
+    bool dfs(int crs, vector<vector<int>>& prereq) {
+        if (cycle.count(crs))
+            return false;
+        if (visit.count(crs))
+            return true;
+        cycle.insert(crs);
+        for (int pre : prereq[crs]) {
+            if (dfs(pre, prereq) == false)
+                return false;
         }
-
-        pathVis[node] = 0;
-        st.push(node);
-        return false;
+        cycle.erase(crs);
+        visit.insert(crs);
+        output.push_back(crs);
+        return true;
     }
 
-public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<int> adj[numCourses];
-        for (auto& pre : prerequisites) {
-            adj[pre[1]].push_back(pre[0]); // edge from prereq to course
+        vector<vector<int>> prereq(numCourses);
+        for (auto& p : prerequisites) {
+            int crs = p[0];
+            int pre = p[1];
+            prereq[crs].push_back(pre);
         }
-
-        vector<int> vis(numCourses, 0);
-        vector<int> pathVis(numCourses, 0);
-        stack<int> st;
-
-        for (int i = 0; i < numCourses; i++) {
-            if (!vis[i]) {
-                if (dfsCheck(i, adj, vis, pathVis, st)) {
-                    return {}; // cycle detected
-                }
-            }
+        for (int c = 0; c < numCourses; c++) {
+            if (dfs(c, prereq) == false)
+                return {};
         }
-
-        vector<int> topo;
-        while (!st.empty()) {
-            topo.push_back(st.top());
-            st.pop();
-        }
-
-        return topo;
+        return output;
     }
 };
