@@ -1,35 +1,47 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> st(wordList.begin(), wordList.end());
-
-        if (st.find(endWord) == st.end()) return 0;
-
-        queue<pair<string, int>> q;
-        q.push({beginWord, 1});
-
-        while (!q.empty()) {
-            string word = q.front().first;
-            int steps = q.front().second;
-            q.pop();
-
-            if (word == endWord) return steps;
-
-            for (int i = 0; i < word.length(); i++) {
-                char original = word[i];
-
-                for (char ch = 'a'; ch <= 'z'; ch++) {
-                    word[i] = ch;
-                    if (st.find(word) != st.end()) {
-                        q.push({word, steps + 1});
-                        st.erase(word); // remove to prevent revisiting
-                    }
-                }
-
-                word[i] = original;
+        bool found = false;
+        for (auto &word : wordList) {
+            if (word == endWord) {
+                found = true;
+                break;
             }
         }
-
+        if (!found) return 0;
+        unordered_map<string, vector<string>> nei;
+        wordList.push_back(beginWord);
+        for (auto &word : wordList) {
+            for (int i = 0; i < word.size(); i++) {
+                string pattern = word;
+                pattern[i] = '*';
+                nei[pattern].push_back(word);
+            }
+        }
+        queue<string> q;
+        unordered_set<string> visit;
+        q.push(beginWord);
+        visit.insert(beginWord);
+        int res = 1;
+        while (!q.empty()) {
+            int sz = q.size();
+            while (sz--) {
+                string word = q.front();
+                q.pop();
+                if (word == endWord) return res;
+                for (int i = 0; i < word.size(); i++) {
+                    string pattern = word;
+                    pattern[i] = '*';
+                    for (auto &neiWord : nei[pattern]) {
+                        if (!visit.count(neiWord)) {
+                            visit.insert(neiWord);
+                            q.push(neiWord);
+                        }
+                    }
+                }
+            }
+            res++;
+        }
         return 0;
     }
 };
