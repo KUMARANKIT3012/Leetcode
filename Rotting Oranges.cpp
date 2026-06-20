@@ -1,58 +1,46 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
+        queue<pair<int, int>> q;
+        int time = 0, fresh = 0;
 
-        queue<pair<pair<int, int>, int>> q; // {{row, col}, time}
-        vector<vector<int>> vis(n, vector<int>(m, 0)); // visited matrix
+        int ROWS = grid.size();
+        int COLS = grid[0].size();
 
-        // Step 1: Add all initially rotten oranges to the queue
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                if (grid[i][j] == 2) {
-                    q.push({{i, j}, 0});
-                    vis[i][j] = 1;
-                }
+        for (int r = 0; r < ROWS; r++) {
+            for (int c = 0; c < COLS; c++) {
+                if (grid[r][c] == 1)
+                    fresh++;
+
+                if (grid[r][c] == 2)
+                    q.push({r, c});
             }
         }
+        vector<pair<int, int>> directions = {
+            {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+        };
+        while (!q.empty() && fresh > 0) {
+            int size = q.size();
 
-        int tm = 0;
-        int drow[] = {-1, 0, 1, 0}; // directions (up, right, down, left)
-        int dcol[] = {0, 1, 0, -1};
+            for (int i = 0; i < size; i++) {
+                auto [r, c] = q.front();
+                q.pop();
+                for (auto [dr, dc] : directions) {
+                    int row = r + dr;
+                    int col = c + dc;
 
-        // Step 2: BFS to rot adjacent oranges
-        while (!q.empty()) {
-            int r = q.front().first.first;
-            int c = q.front().first.second;
-            int t = q.front().second;
-            q.pop();
+                    if (row < 0 || row >= ROWS ||
+                        col < 0 || col >= COLS ||
+                        grid[row][col] != 1)
+                        continue;
 
-            tm = max(tm, t); // track max time
-
-            for (int i = 0; i < 4; ++i) {
-                int nrow = r + drow[i];
-                int ncol = c + dcol[i];
-
-                // If within bounds, fresh orange, and not visited yet
-                if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                    grid[nrow][ncol] == 1 && vis[nrow][ncol] == 0) {
-
-                    q.push({{nrow, ncol}, t + 1});
-                    vis[nrow][ncol] = 1;
+                    grid[row][col] = 2;
+                    q.push({row, col});
+                    fresh--;
                 }
             }
+            time++;
         }
-
-        // Step 3: Check if any fresh orange is left
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                if (grid[i][j] == 1 && vis[i][j] == 0) {
-                    return -1;
-                }
-            }
-        }
-
-        return tm;
+        return fresh == 0 ? time : -1;
     }
 };
