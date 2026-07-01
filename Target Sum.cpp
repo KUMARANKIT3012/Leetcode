@@ -33,3 +33,24 @@ public:
         return findWays(nums, S1);
     }
 };
+
+
+// neetcode : 
+class Solution {
+public:
+    unordered_map<string, int> dp;
+    int backtrack(int i, int total, vector<int>& nums, int target) {
+        if (i == nums.size()) return total == target ? 1 : 0;
+
+        string key = to_string(i) + "," + to_string(total);
+        if (dp.count(key)) return dp[key];
+
+        dp[key] = backtrack(i + 1, total + nums[i], nums, target) + backtrack(i + 1, total - nums[i], nums, target);
+
+        return dp[key];
+    }
+
+    int findTargetSumWays(vector<int>& nums, int target) {
+        return backtrack(0, 0, nums, target);
+    }
+};
