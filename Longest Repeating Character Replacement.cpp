@@ -1,23 +1,26 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        int left = 0, right = 0, max_freq = 0, max_length = 0;
-        unordered_map<char, int> freq;
+        int res = 0;
+        unordered_set<char> charSet(s.begin(), s.end());
 
-        for (right = 0; right < s.size(); right++) {
-            freq[s[right]]++;
-            max_freq = max(max_freq, freq[s[right]]);
+        for(char c : charSet){
+            int count = 0;
+            int l = 0;
+            for(int r = 0; r<s.size(); r++){
+                if(s[r] == c){
+                    count++;
+                }
 
-            // If the remaining characters exceed k, shrink the window
-            if ((right - left + 1) - max_freq > k) {
-                freq[s[left]]--;
-                left++;
+                while((r - l + 1) - count > k){
+                    if(s[l] == c){
+                        count--;
+                    }
+                    l++;
+                }
+                res = max(res, r - l + 1);
             }
-
-            // Update the max length of valid substring
-            max_length = max(max_length, right - left + 1);
         }
-
-        return max_length;
+        return res;
     }
 };
