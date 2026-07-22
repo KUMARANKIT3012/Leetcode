@@ -1,40 +1,38 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        unordered_map<char, int> need, window;
-        for (char c : t) need[c]++;
+        if(t.empty())return "";
+        unordered_map<char, int> countT, window;
+        for(char c : t){
+            countT[c]++;
+        }
 
-        int left = 0, right = 0;
-        int valid = 0;
-        int start = 0, minLen = INT_MAX;
+        int have = 0, need = countT.size();
+        pair<int,int> res = {-1,-1};
+        int reslen = INT_MAX;
+        int l = 0;
 
-        while (right < s.size()) {
-            char c = s[right];
-            right++;
+        for(int r = 0; r < s.length(); r++){
+            char c = s[r];
+            window[c]++;
 
-            // Update window count
-            if (need.count(c)) {
-                window[c]++;
-                if (window[c] == need[c]) {
-                    valid++;
-                }
+            if(countT.count(c) && window[c] == countT[c]){
+                have++;
             }
-            // if valid hai toh try to shrink window
-            while (valid == need.size()) {
-                if (right - left < minLen) {
-                    start = left;
-                    minLen = right - left;
+
+            while(have == need){
+                if((r - l + 1) < reslen){
+                    reslen = r - l +1;
+                    res = {l, r};
                 }
-                char d = s[left];
-                left++;
-                if (need.count(d)) {
-                    if (window[d] == need[d]) {
-                        valid--;
-                    }
-                    window[d]--;
+
+                window[s[l]]--;
+                if(countT.count(s[l]) && window[s[l]] < countT[s[l]]){
+                    have--;
                 }
+                l++;
             }
         }
-        return minLen == INT_MAX ? "" : s.substr(start, minLen);
+        return reslen == INT_MAX ? "" : s.substr(res.first, reslen);
     }
 };
