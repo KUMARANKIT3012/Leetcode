@@ -1,30 +1,46 @@
 class Solution {
 public:
-bool isfreqsame(int freq1[], int freq2[]){// O(1)
-    for(int i=0; i<26; i++){
-        if(freq1[i]!=freq2[i]){
-            return false;
-        }
-    }
-    return true;
-}
     bool checkInclusion(string s1, string s2) {
-        int freq[26]={0};
-        for(int i=0; i<s1.length();i++){
-            freq[s1[i]-'a']++;// a-> 0, b-> 1
+        if(s1.length() > s2.length()) return false;
+
+        vector<int>s1Count(26, 0);
+        vector<int>s2Count(26, 0);
+        for(int i = 0; i<s1.length(); i++){
+            s1Count[s1[i] - 'a']++;
+            s2Count[s2[i] - 'a']++;
         }
-        int windsize=s1.length();
-        for(int i=0; i<s2.length(); i++){
-            int windidx=0,idx=i;
-            int windfreq[26]={0};
-            while(windidx < windsize && idx<s2.length()){
-                windfreq[s2[idx]-'a']++;
-                windidx++; idx++;
+
+        int matches = 0;
+        for(int i = 0; i<26; i++){
+            if(s1Count[i] == s2Count[i]){
+                matches++;
             }
-            if(isfreqsame(freq, windfreq)){
+        }
+
+        int l = 0;
+        for(int r = s1.length(); r < s2.length(); r++){
+            if(matches == 26){
                 return true;
             }
+
+            int index = s2[r] - 'a';
+            s2Count[index]++;
+            if(s1Count[index] == s2Count[index]){
+                matches++;
+            }
+            else if(s1Count[index] + 1 == s2Count[index]){
+                matches--;
+            }
+
+            index = s2[l] - 'a';
+            s2Count[index]--;
+            if (s1Count[index] == s2Count[index]) {
+                matches++;
+            } else if (s1Count[index] - 1 == s2Count[index]) {
+                matches--;
+            }
+            l++;
         }
-        return false;
+        return matches == 26;
     }
 };
