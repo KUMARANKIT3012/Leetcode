@@ -1,36 +1,45 @@
-#include <queue>
-using namespace std;
-
 class Solution {
 public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if (list1 == NULL) {
+            return list2;
+        }
+
+        if (list2 == NULL) {
+            return list1;
+        }
+
+        if (list1->val <= list2->val) {
+            list1->next = mergeTwoLists(list1->next, list2);
+            return list1;
+        }
+        else {
+            list2->next = mergeTwoLists(list2->next, list1);
+            return list2;
+        }
+    }
+
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        auto cmp = [](ListNode* a, ListNode* b) {
-            return a->val > b->val;
-        };
-
-        priority_queue<ListNode*, vector<ListNode*>, decltype(cmp)> minHeap(cmp);
-
-        for (auto list : lists) {
-            if (list != nullptr) {
-                minHeap.push(list);
-            }
+        if (lists.empty()) {
+            return NULL;
         }
 
-        ListNode* dummy = new ListNode(0);
-        ListNode* tail = dummy;
+        while (lists.size() > 1) {
+            vector<ListNode*> mergedLists;
 
-        while (!minHeap.empty()) {
-            ListNode* smallest = minHeap.top();
-            minHeap.pop();
+            for (int i = 0; i < lists.size(); i += 2) {
+                ListNode* list1 = lists[i];
 
-            tail->next = smallest;
-            tail = tail->next;
+                ListNode* list2 = (i + 1 < lists.size())
+                                   ? lists[i + 1]
+                                   : NULL;
 
-            if (smallest->next != nullptr) {
-                minHeap.push(smallest->next);
+                mergedLists.push_back(mergeTwoLists(list1, list2));
             }
+
+            lists = mergedLists;
         }
 
-        return dummy->next;
+        return lists[0];
     }
 };
