@@ -1,7 +1,7 @@
 class MinStack {
 public:
-        stack<int> st;
-        stack<int> minst;
+        stack<int>st;
+        stack<int>minst;
     MinStack() {
     }
     
@@ -17,27 +17,23 @@ public:
     }
     
     void pop() {
-        if(!st.empty() && !minst.empty()){
+        if(!minst.empty() && !st.empty()){
             st.pop();
             minst.pop();
         }
     }
     
     int top() {
-        if(!st.empty()){
-            return st.top();
-        }
-        else{
+        if(st.empty()){
             return -1;
         }
+        return st.top();
     }
     
     int getMin() {
-        if(!minst.empty()){
-            return minst.top();
-        }
-        else{
+        if(minst.empty()){
             return -1;
         }
+        return minst.top();
     }
 };
