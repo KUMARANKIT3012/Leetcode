@@ -1,25 +1,26 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
+        unordered_map<char, int>count;
+        int l = 0;
         int res = 0;
-        unordered_set<char> charSet(s.begin(), s.end());
+        for(int r = 0; r < s.length(); r++){
+            count[s[r]]++;
 
-        for(char c : charSet){
-            int count = 0;
-            int l = 0;
-            for(int r = 0; r<s.size(); r++){
-                if(s[r] == c){
-                    count++;
-                }
-
-                while((r - l + 1) - count > k){
-                    if(s[l] == c){
-                        count--;
-                    }
-                    l++;
-                }
-                res = max(res, r - l + 1);
+            int maxcount = 0;
+            for(auto x : count){
+                maxcount = max(maxcount, x.second);
             }
+
+            while((r - l + 1) - maxcount > k){
+                count[s[l]]--;
+                l++;
+                maxcount = 0;
+                for(auto x : count){
+                    maxcount = max(maxcount, x.second);
+                }
+            }
+            res = max(res, r - l +1);
         }
         return res;
     }
