@@ -1,35 +1,25 @@
-#include <vector>
-#include <algorithm>
-#include <cmath>  // For ceil
-using namespace std;
-
 class Solution {
 public:
-    // Helper function using std::ceil
-    bool canEatAll(const vector<int>& piles, int k, int h) {
-        long long totalHours = 0;
-        for (int pile : piles) {
-            totalHours += ceil((double)pile / k);  // ceil
-        }
-        return totalHours <= h;
-    }
-
     int minEatingSpeed(vector<int>& piles, int h) {
-        int low = 1;
-        int high = *max_element(piles.begin(), piles.end());
-        int ans = high;
+        int n = piles.size();
+        int l = 1;
+        int r = *max_element(piles.begin(), piles.end());
+        int res = r;
 
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-
-            if (canEatAll(piles, mid, h)) {
-                ans = mid;
-                high = mid - 1;
-            } else {
-                low = mid + 1;
+        while(l <= r){
+            int mid = (l + r)/2;
+            long long tt = 0;
+            for(int p : piles){
+                tt += (p + mid - 1)/mid;
+            }
+            if(tt <= h){
+                res = mid;
+                r = mid-1;
+            }
+            else{
+                l = mid+1;
             }
         }
-
-        return ans;
+        return res;
     }
 };
