@@ -1,15 +1,16 @@
 class Solution {
 public:
-    pair<bool,int> dfs(TreeNode* root) {
-        if(!root) return {true,0};
-        auto left = dfs(root->left);
-        auto right = dfs(root->right);
-        bool balanced = left.first && right.first &&
-            abs(left.second - right.second) <= 1;
-        return {balanced,1 + max(left.second,right.second)};
-    }
+    int Check(TreeNode* root){
+        if(!root) return NULL;
+        int lh = Check(root->left);
+        if(lh == -1) return -1;
+        int rh = Check(root->right);
+        if(rh == -1) return -1;
+        if(abs(lh - rh) > 1) return -1;
 
+        return 1 + max(lh, rh);
+    }
     bool isBalanced(TreeNode* root) {
-        return dfs(root).first;
+        return Check(root) != -1;
     }
 };
