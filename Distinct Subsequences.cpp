@@ -91,3 +91,45 @@ public:
         return prev[m];
     }
 };
+
+
+
+// newer code : 
+class Solution {
+private:
+    vector<vector<long long>> memo;
+
+    long long solve(int i, int j, const string& s, const string& t) {
+        if (j < 0) {
+            return 1;
+        }
+        if (i < 0) {
+            return 0;
+        }
+
+        if (memo[i][j] != -1) {
+            return memo[i][j];
+        }
+
+        long long count = 0;
+        
+        if (s[i] == t[j]) {
+            count += solve(i - 1, j - 1, s, t);
+            count += solve(i - 1, j, s, t);
+        } else {
+            count += solve(i - 1, j, s, t);
+        }
+
+        return memo[i][j] = count;
+    }
+
+public:
+    int numDistinct(string s, string t) {
+        int n = s.size();
+        int m = t.size();
+        
+        memo.resize(n, vector<long long>(m, -1));
+        
+        return solve(n - 1, m - 1, s, t);
+    }
+};
