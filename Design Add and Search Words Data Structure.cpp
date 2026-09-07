@@ -1,21 +1,22 @@
-class TrieNode {
+class TrieNode{
 public:
-    unordered_map<char, TrieNode*> children;
+    unordered_map<char, TrieNode*>children;
     bool word = false;
 };
 
 class WordDictionary {
-public:
     TrieNode* root;
+public:
     WordDictionary() {
         root = new TrieNode();
     }
     
     void addWord(string word) {
         TrieNode* cur = root;
-        for(char c : word) {
-            if(cur->children.find(c) == cur->children.end())
+        for(char c : word){
+            if(cur->children.find(c) == cur->children.end()){
                 cur->children[c] = new TrieNode();
+            }
             cur = cur->children[c];
         }
         cur->word = true;
@@ -44,3 +45,10 @@ public:
         return dfs(0, root, word);
     }
 };
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
