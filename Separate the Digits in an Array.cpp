@@ -1,7 +1,8 @@
+// updated code:
 class Solution {
 public:
     vector<int> separateDigits(vector<int>& nums) {
-        vector<int> result;
+        vector<int> ans;
 
         for (int num : nums) {
             vector<int> temp;
@@ -14,10 +15,10 @@ public:
             reverse(temp.begin(), temp.end());
 
             for (int digit : temp) {
-                result.push_back(digit);
+                ans.push_back(digit);
             }
         }
 
-        return result;
+        return ans;
     }
 };
