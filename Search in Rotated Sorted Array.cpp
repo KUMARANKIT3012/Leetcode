@@ -1,26 +1,29 @@
+// corrected code 
 class Solution {
 public:
-    int search(vector<int>& A, int tar) {
-        int st=0, end=A.size()-1;
-        while(st<=end){
-            int mid=st+(end-st)/2;
-            if(A[mid]==tar){
+    int search(vector<int>& nums, int target) {
+        int n = nums.size();
+        int st = 0;
+        int end = n-1;
+        while(st <= end){
+            int mid = st + (end - st) / 2;
+            if(nums[mid] == target){
                 return mid;
             }
-            if(A[st]<=A[mid]){ // check for which side is rotated 
-                if(A[st]<=tar && tar<=A[mid]){
-                    end=mid-1;
+            else if(nums[st] <= nums[mid]){
+                if(nums[st] <= target && target <= nums[mid]){
+                    end = mid-1;
                 }
                 else{
-                    st=mid+1;
+                    st = mid+1;
                 }
             }
             else{
-                if(A[mid]<=tar && tar<=A[end]){
-                    st=mid+1;
+                if(nums[mid] < target && target <= nums[end]){
+                    st = mid+1;
                 }
                 else{
-                    end=mid-1;
+                    end = mid-1;
                 }
             }
         }
