@@ -1,29 +1,28 @@
 class Solution {
 public:
-bool isalphanum(char ch){
-    if((ch>='0'&& ch<='9') || (tolower(ch)>='a'&&tolower(ch)<='z')){
-        return true;
+    bool isAlphaNum(char c){
+        return (c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z' || c >= '0' && c <='9');
     }
-    return false;
-}
-    bool isPalindrome(string s) {
-        int st=0,end=s.length()-1;
 
-        while(st<end){
-            if(!isalphanum(s[st])){
-                st++;
+    bool isPalindrome(string s) {
+        int l = 0;
+        int n = s.length();
+        int r = n-1;
+        while(l < r){
+            if(l < r && !isAlphaNum(s[l])){
+                l++;
                 continue;
             }
-            if(!isalphanum(s[end])){
-                end--;
+            else if(l < r && !isAlphaNum(s[r])){
+                r--;
                 continue;
             }
-            if(tolower(s[st])!=tolower(s[end])){
+            else if(l < r && tolower(s[l]) != tolower(s[r])){
                 return false;
             }
-            st++;
-            end--;
+            l++;
+            r--;
         }
         return true;
-    }
+    }    
 };
